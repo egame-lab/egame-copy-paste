@@ -1,16 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "E-game 積木複製貼上",
-  "description": "僅提供 E-game／Blockly 積木 XML 的複製與貼上功能。",
-  "version": "1.0.1",
+  "name": "E-game 積木複製貼上（精簡版）",
+  "description": "保留 Egame Tools 原版的 Blockly XML 複製與貼上功能。",
+  "version": "1.0.0",
   "permissions": [
     "clipboardRead"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://*.egame.kh.edu.tw/auth/dotCode/apps/dojo/*",
-        "https://*.egame.kh.edu.tw/auth/dotCode/apps/duck/*"
+        "https://*.egame.kh.edu.tw/auth/dotCode/apps/dojo/",
+        "https://*.egame.kh.edu.tw/auth/dotCode/apps/duck/play"
+      ],
+      "include_globs": [
+        "*play",
+        "*edit"
       ],
       "js": [
         "copy-paste.js"

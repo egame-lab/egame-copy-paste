@@ -1,39 +1,41 @@
 # E-game 積木複製貼上（精簡版）
 
-從 [wangicheng/egame-tools](https://github.com/wangicheng/egame-tools) 的 `copy_paste_blocks_xml.js` 拆出，依 MIT 授權改作。保留 E-game／Blockly **積木 XML 的複製、貼上**。
+從 [wangicheng/egame-tools](https://github.com/wangicheng/egame-tools) 的 `js/copy_paste_blocks_xml.js` 獨立整理出的 Chrome／Edge 擴充功能。
+
+## 功能
+
+- **複製單個積木**：使用 Blockly 的右鍵「複製」，或其原生快捷鍵 `Ctrl+C`，若操作有呼叫 `Blockly.copy_()`，就同步把選取積木的 XML 寫入系統剪貼簿。
+- **剪下**：使用遊戲本身的右鍵「剪下」或 `Ctrl+X`，僅在 Blockly 呼叫 `Blockly.copy_()` 時同步輸出 XML。原工作區哪些積木會保留取決於遊戲 Blockly。
+- **複製**：按武館畫面右上方的雙方框圖示，把整個工作區積木複製為 XML。
+- **貼上**：按複製旁邊的剪貼簿圖示，從系統剪貼簿讀取 XML 並新增至原工作區。
+- **`Ctrl+V`**：原版腳本沒有另行實作 `Ctrl+V`；使用右上角的貼上按鈕。
+
+![武館上方工具列。右側雙方框為複製全部，剪貼簿為貼上。](images/toolbar.png)
+
+> 圖中的「雙方框」和「剪貼簿」是外掛提供的兩個按鈕。複製／剪下單個積木則使用 Blockly 本身的操作。
 
 ## 安裝（Chrome／Edge）
 
-1. 解壓縮本 ZIP 檔。
-2. 在 Chrome 開啟 `chrome://extensions/`（Edge 開啟 `edge://extensions/`）。
-3. 啟用右上角的「開發人員模式」。
-4. 按「載入未封裝項目」，選擇解壓後內含 `manifest.json` 的 `egame-copy-paste` 資料夾。
-5. 重新整理已開啟的 E-game 積木編輯頁面。
+1. 下載專案 ZIP 並解壓縮。
+2. 開啟 Chrome 的 `chrome://extensions/` 或 Edge 的 `edge://extensions/`。
+3. 啟用「開發人員模式」，按「載入未封裝項目」。
+4. 選擇**包含 `manifest.json`** 的 `egame-copy-paste` 資料夾。
+5. 停用其他同時修改複製貼上的 Egame Tools，重新整理武館頁面。
 
-## 使用
-![複製與貼上按鈕位置](images/toolbar.png)
-- 兩個按鈕位於武館上方工具列的右側，緊鄰音效控制與畫筆圖像按鈕。
-- **單個積木複製**：選取積木後按 `Ctrl+C`（或右鍵「複製」），將其 XML 寫入系統剪貼簿。
-- **剪下（Ctrl+X）**：選取要剪下的積木按 `Ctrl+X`。連接在該積木後方的積木與內部子積木也會一起剪下。
-- **複製（雙重方框圖示）**：按 E-game 編輯畫面右上方的「複製」圖示，將整個工作區輸出為積木 XML。
-- **貼上（剪貼簿圖示）**：按複製旁邊的「貼上」圖示，將剪貼簿中的積木 XML **加入**目前工作區，不會先清空現有積木。
-- 支援原版 Egame Tools 的 XML 片段，例如 `<block ...>...</block>`，也可貼上完整 `<xml>...</xml>`。
+## 專案檔案
 
-## 版本紀錄
+```text
+egame-copy-paste/
+├── manifest.json       # Chrome/Edge 擴充功能設定
+├── copy-paste.js       # 原作者複製貼上邏輯（未修改）
+├── copy-paste.css      # 原作者工具列按鈕的必要樣式
+├── images/
+│   └── toolbar.png     # 使用者提供的按鈕位置截圖
+├── README.md
+└── LICENSE             # MIT；保留原作者著作權聲明
+```
 
-- **v1.0.1**：修正 `Ctrl+X` 在舊版 Blockly 無反應的問題，新增安全剪下處理。
-- **v1.0.0**：提供複製全部、單個積木複製與貼上。
-
-## 注意事項
-
-- 此擴充功能在 `egame.kh.edu.tw` 的 E-game 積木頁面載入。
-- 請在 E-game 分頁處於前景時按複製／貼上，瀏覽器可能因焦點或權限阻止剪貼簿操作。
-- 建議先停用原版 **Egame Tools** 的相同功能或停用原版擴充功能，避免出現重複按鈕及攔截同一個複製動作。
-- 此版本沿用原版的 Blockly XML API；若遊戲改版，可能需調整。
-
-## 檔案
-
-- `manifest.json`：指定 E-game 積木頁與剪貼簿讀取權限。
-- `copy-paste.js`：全部複製、單個積木複製、貼上 XML。
-- `copy-paste.css`：兩個按鈕的樣式。
-- `LICENSE`：原專案 MIT 授權。
+## 原始專案與授權
+- 原始碼：[wangicheng/egame-tools](https://github.com/wangicheng/egame-tools)
+- 原始檔案：`js/copy_paste_blocks_xml.js`、`css/dotcode_gaming.css`
+- 授權：[MIT License](LICENSE)，保留原專案 `Copyright (c) 2025 wangicheng`。
