@@ -1,6 +1,6 @@
 # E-game 積木複製貼上（精簡版）
 
-從 [wangicheng/egame-tools](https://github.com/wangicheng/egame-tools) 的 `copy_paste_blocks_xml.js` 拆出，依 MIT 授權改作。保留 E-game／Blockly **積木 XML 的複製、貼上**，不含其他 Egame Tools 功能。
+從 [wangicheng/egame-tools](https://github.com/wangicheng/egame-tools) 的 `copy_paste_blocks_xml.js` 拆出，依 MIT 授權改作。保留 E-game／Blockly **積木 XML 的複製、貼上**。
 
 ## 安裝（Chrome／Edge）
 
@@ -13,9 +13,10 @@
 ## 使用
 
 - **單個積木複製**：右鍵「複製」／「剪下」，或 `Ctrl+C`／`Ctrl+X`，在原本的 Blockly 複製流程中額外將 XML 寫入剪貼簿。
-- **複製全部**：按 E-game 編輯畫面右上方的「複製」圖示，將整個工作區輸出為積木 XML。
-- **貼上**：按旁邊的「貼上」圖示，將剪貼簿中的積木 XML **加入**目前工作區，不會先清空現有積木。
+- **複製（雙重方框圖示）**：按 E-game 編輯畫面右上方的「複製」圖示，將整個工作區輸出為積木 XML。
+- **貼上（剪貼簿圖示）**：按複製旁邊的「貼上」圖示，將剪貼簿中的積木 XML **加入**目前工作區，不會先清空現有積木。
 - 支援原版 Egame Tools 的 XML 片段，例如 `<block ...>...</block>`，也可貼上完整 `<xml>...</xml>`。
+- 兩個按鈕位於武館上方工具列的右側，緊鄰音效控制與畫筆圖像按鈕。
 
 ## 注意事項
 
