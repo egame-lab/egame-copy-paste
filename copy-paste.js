@@ -10,7 +10,7 @@
   const getWorkspace = () => window.Blockly?.getMainWorkspace?.() ?? window.Blockly?.mainWorkspace;
 
   // 移除長度為 20 的積木 ID，避免重複貼上時 ID 衝突。
-  // 只移除 XML 屬性，不改動積木中的文字內容。
+  // 只移除 XML 屬性，不改動積木中的文字內容。。
   function serializeWithoutBlockIds(xmlNode) {
     const copy = xmlNode.cloneNode(true);
     const nodes = [copy, ...copy.querySelectorAll('[id]')];
@@ -61,8 +61,8 @@
     }
   }
 
-  // 右鍵「複製／剪下」及 Ctrl+C／Ctrl+X：保留 Blockly 本身的操作，
-  // 額外把單個積木的 XML 放入系統剪貼簿（原版功能）。
+  // Blockly 右鍵複製／剪下與 Ctrl+C 流程，
+  // 額外將單個積木的 XML 寫入系統剪貼簿；Ctrl+X 由上方獨立處理。
   const hookTimer = setInterval(() => {
     const blockly = window.Blockly;
     if (!blockly?.Xml || typeof blockly.copy_ !== 'function') return;
@@ -82,6 +82,57 @@
       return originalCopy.call(this, block, ...args);
     };
   }, 200);
+
+  // 舊版 Blockly 並不一定內建 Ctrl+X：在工作區有選取積木時實作剪下。
+  // 不攔截輸入框內正常的文字剪下。
+  let cutInProgress = false;
+
+  function getSelectedBlock() {
+    const blockly = window.Blockly;
+    const workspace = getWorkspace();
+    if (!blockly || !workspace) return null;
+
+    // E-game 的舊 Blockly 使用 Blockly.selected；也相容新版的選取 API。
+    const block = blockly.selected ?? blockly.getSelected?.() ?? workspace.getSelected?.();
+    if (!block || block.workspace !== workspace) return null;
+    if (typeof block.isDeletable === 'function' && !block.isDeletable()) return null;
+    if (block.isInFlyout || block.isShadow?.()) return null;
+    if (typeof block.dispose !== 'function') return null;
+    return block;
+  }
+
+  function isTextEditing(event) {
+    const editingSelector = 'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]';
+    return Boolean(event.target?.closest?.(editingSelector) ||
+      document.activeElement?.closest?.(editingSelector));
+  }
+
+  document.addEventListener('keydown', async event => {
+    if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey ||
+        event.key?.toLowerCase() !== 'x' || isTextEditing(event)) return;
+
+    const block = getSelectedBlock();
+    if (!block) return;
+
+    // 截斷原生 Blockly／瀏覽器的剪下處理，避免積木被重複刪除。
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (cutInProgress) return;
+    cutInProgress = true;
+
+    try {
+      if (!BlocklyReady()) throw new Error('找不到 Blockly XML API');
+      const xml = serializeWithoutBlockIds(window.Blockly.Xml.blockToDom(block));
+      await navigator.clipboard.writeText(xml);
+
+      // 僅在剪貼簿寫入成功後刪除。dispose(false) 會連同該積木的子樹一起移除。
+      if (block.workspace === getWorkspace()) block.dispose(false);
+    } catch (error) {
+      warnClipboard('剪下', error);
+    } finally {
+      cutInProgress = false;
+    }
+  }, true);
 
   function addButtons() {
     const pointerButton = document.getElementById('pointerButton');
