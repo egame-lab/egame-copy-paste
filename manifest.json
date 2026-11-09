@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "E-game 積木複製貼上（精簡版）",
-  "description": "保留 Egame Tools 原版的 Blockly XML 複製與貼上功能。",
-  "version": "1.0.0",
+  "name": "E-game 積木工具（精簡版）",
+  "description": "積木 XML 複製貼上與分批加速執行，可暫停或繼續。",
+  "version": "1.1.0",
   "permissions": [
     "clipboardRead"
   ],
@@ -17,6 +17,7 @@
         "*edit"
       ],
       "js": [
+        "turtle-speedup.js",
         "copy-paste.js"
       ],
       "css": [
